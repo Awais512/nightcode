@@ -3,24 +3,33 @@ import { createRoot } from "@opentui/react";
 import { Header } from "./components/header";
 import { StatusBar } from "./components/status-bar";
 import { InputBar } from "./components/input-bar";
+import { ToastProvider } from "./providers/toast";
+import { KeyboardLayerProvider } from "./providers/keyboard-layer";
+import { DialogProvider } from "./providers/dialog";
 
 function App() {
   return (
-    <box
-      alignItems="center"
-      justifyContent="center"
-      backgroundColor="#0D0D12"
-      width="100%"
-      height="100%"
-      gap={2}
-    >
-      <Header />
-      <box width="100%" maxWidth={78} paddingX={2}>
-        <InputBar onSubmit={() => {}} />
-      </box>
-    </box>
+    <KeyboardLayerProvider>
+      <DialogProvider>
+        <ToastProvider>
+          <box
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor="#0D0D12"
+            width="100%"
+            height="100%"
+            gap={2}
+          >
+            <Header />
+            <box width="100%" maxWidth={78} paddingX={2}>
+              <InputBar onSubmit={() => {}} />
+            </box>
+          </box>
+        </ToastProvider>
+      </DialogProvider>
+    </KeyboardLayerProvider>
   );
 }
 
-const renderer = await createCliRenderer();
+const renderer = await createCliRenderer({ exitOnCtrlC: false });
 createRoot(renderer).render(<App />);
