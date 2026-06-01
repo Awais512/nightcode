@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { Header } from "../components/header";
 import { InputBar } from "../components/input-bar";
 import { useNavigate } from "react-router";
+import { Spinner } from "../components/spinner";
 
 export function Home() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export function Home() {
       <box width="100%" maxWidth={78} paddingX={2}>
         <InputBar onSubmit={handleSubmit} />
       </box>
+      <Spinner />
     </box>
   );
 }
