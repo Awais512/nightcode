@@ -3,7 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { findSupportedChatModel } from "@nightcode/shared";
-import { db } from "@nightcode/database";
+import { db } from "@nightcode/database/client";
 import { Role, Mode, MessageStatus } from "@nightcode/database/enums";
 
 const createSessionSchema = z.object({
