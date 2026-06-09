@@ -28,7 +28,7 @@ export function Home() {
       <box width="100%" maxWidth={78} paddingX={2}>
         <InputBar onSubmit={handleSubmit} />
       </box>
-      <Spinner />
+      {/* <Spinner /> */}
     </box>
   );
 }
