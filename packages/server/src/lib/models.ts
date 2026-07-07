@@ -1,4 +1,5 @@
 import { anthropic } from "@ai-sdk/anthropic";
+import { deepseek } from "@ai-sdk/deepseek";
 import { openai } from "@ai-sdk/openai";
 import {
   findSupportedChatModel,
@@ -14,6 +15,11 @@ type AnthropicModelId = Extract<
 >["id"];
 
 type OpenAIModelId = Extract<SupportedChatModel, { provider: "openai" }>["id"];
+
+type DeepseekModelId = Extract<
+  SupportedChatModel,
+  { provider: "deepseek" }
+>["id"];
 
 export type ResolveModel = {
   model: LanguageModel;
@@ -41,6 +47,14 @@ function resolveOpenAiModel(modelId: OpenAIModelId): ResolveModel {
   };
 }
 
+function resolveDeepseekModel(modelId: DeepseekModelId): ResolveModel {
+  return {
+    model: deepseek(modelId),
+    provider: "deepseek",
+    modelId,
+  };
+}
+
 function resolveSupportedChatModel(model: SupportedChatModel): ResolveModel {
   const provider = model.provider;
 
@@ -49,6 +63,8 @@ function resolveSupportedChatModel(model: SupportedChatModel): ResolveModel {
       return resolveAnthropicModel(model.id);
     case "openai":
       return resolveOpenAiModel(model.id);
+    case "deepseek":
+      return resolveDeepseekModel(model.id);
     default:
       return assertUnsupportedProvider(provider);
   }

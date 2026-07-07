@@ -3,7 +3,7 @@ export type ModelPricing = {
   outputUsdPerMillionTokens: number;
 };
 
-export type SupportedProvider = "anthropic" | "openai";
+export type SupportedProvider = "anthropic" | "openai" | "deepseek";
 
 type SupportedChatModelDefinition = {
   id: string;
@@ -61,6 +61,22 @@ export const SUPPORTED_CHAT_MODELS = [
       outputUsdPerMillionTokens: 1.25,
     },
   },
+  {
+    id: "deepseek-v4-flash",
+    provider: "deepseek",
+    pricing: {
+      inputUsdPerMillionTokens: 0.14,
+      outputUsdPerMillionTokens: 0.28,
+    },
+  },
+  {
+    id: "deepseek-v4-pro",
+    provider: "deepseek",
+    pricing: {
+      inputUsdPerMillionTokens: 0.435,
+      outputUsdPerMillionTokens: 0.87,
+    },
+  },
 ] as const satisfies readonly SupportedChatModelDefinition[];
 
 export type SupportedChatModel = (typeof SUPPORTED_CHAT_MODELS)[number];
@@ -71,4 +87,4 @@ export function findSupportedChatModel(modelId: string) {
   return SUPPORTED_CHAT_MODELS.find((model) => model.id === modelId);
 }
 
-export const DEFAULT_CHAT_MODEL_ID: SupportedChatModalId = "claude-opus-4-6";
+export const DEFAULT_CHAT_MODEL_ID: SupportedChatModalId = "deepseek-v4-pro";

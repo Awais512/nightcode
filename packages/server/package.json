@@ -10,13 +10,14 @@
     },
     "dependencies": {
         "@ai-sdk/anthropic": "^3.0.84",
+        "@ai-sdk/deepseek": "^3",
         "@ai-sdk/openai": "^3.0.71",
         "@hono/zod-validator": "^0.8.0",
         "@nightcode/database": "workspace:*",
         "@nightcode/shared": "workspace:*",
         "@sentry/bun": "^10.57.0",
         "@sentry/hono": "^10.57.0",
-        "ai": "^6.0.204",
+        "ai": "^7.0.0",
         "dotenv": "^17.4.2",
         "hono": "^4.12.23",
         "zod": "^4.4.3"
