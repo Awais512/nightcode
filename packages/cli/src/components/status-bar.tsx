@@ -1,4 +1,5 @@
 import { TextAttributes } from "@opentui/core";
+import { DEFAULT_CHAT_MODEL_ID } from "@nightcode/shared";
 import { useTheme } from "../providers/theme";
 
 export function StatusBar() {
@@ -9,7 +10,7 @@ export function StatusBar() {
       <text attributes={TextAttributes.DIM} fg={colors.dimSeparator}>
         &#8250;
       </text>
-      <text>Opus 4.6</text>
+      <text>{DEFAULT_CHAT_MODEL_ID}</text>
     </box>
   );
 }

@@ -3,6 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import sessions from "./routes/sessions";
 import { sentry } from "@sentry/hono/bun";
 import * as Sentry from "@sentry/hono/bun";
+import chat from "./routes/chat";
 
 const app = new Hono();
 
@@ -51,7 +52,7 @@ app.onError((error, c) => {
   return c.json({ error: "Internal server error" }, 500);
 });
 
-const routes = app.route("/sessions", sessions);
+const routes = app.route("/sessions", sessions).route("/chat", chat);
 export type AppType = typeof routes;
 
 export default { port: 3000, fetch: app.fetch, idleTimeout: 255 };
