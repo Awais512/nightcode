@@ -130,7 +130,7 @@ export function useChat(sessionId: string, initialMessage: Message[]) {
         },
       ]);
     },
-    [],
+    [updateMessages],
   );
 
   const clearStream = useCallback(

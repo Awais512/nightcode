@@ -16,7 +16,7 @@ import {
   type SupportedChatModalId,
 } from "@nightcode/shared";
 import { useChat } from "../hooks/use-chat";
-import type { Message, ClientMessagePart } from "../hooks/use-chat";
+import type { Message } from "../hooks/use-chat";
 import { MessageStatus } from "@nightcode/database";
 import { useKeyboardLayer } from "../providers/keyboard-layer";
 
