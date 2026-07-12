@@ -118,28 +118,28 @@ async function streamAIResponse(
         await persistInterruptMessage();
         return;
       }
-
-      const elapsedMs = Date.now() - startTime;
-      const assistantMessage = await db.message.create({
-        data: {
-          sessionId,
-          role: "ASSISTANT",
-          status: MessageStatus.COMPLETED,
-          model,
-          content: fullText,
-          mode,
-          duration: Math.round(elapsedMs / 1000),
-        },
-      });
-
-      const doneEvent: ChatStreamEvent = {
-        type: "done",
-        messageId: assistantMessage.id,
-        durationMs: elapsedMs,
-      };
-
-      await stream.writeSSE({ event: "done", data: JSON.stringify(doneEvent) });
     }
+
+    const elapsedMs = Date.now() - startTime;
+    const assistantMessage = await db.message.create({
+      data: {
+        sessionId,
+        role: "ASSISTANT",
+        status: MessageStatus.COMPLETED,
+        model,
+        content: fullText,
+        mode,
+        duration: Math.round(elapsedMs / 1000),
+      },
+    });
+
+    const doneEvent: ChatStreamEvent = {
+      type: "done",
+      messageId: assistantMessage.id,
+      durationMs: elapsedMs,
+    };
+
+    await stream.writeSSE({ event: "done", data: JSON.stringify(doneEvent) });
   } catch (err) {
     if (abortcontroller.signal.aborted) {
       await persistInterruptMessage();
