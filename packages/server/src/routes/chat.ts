@@ -100,7 +100,10 @@ async function streamAIResponse(
     });
 
     for await (const part of result.fullStream) {
-      if (stream.aborted) break;
+      if (stream.aborted) {
+        await persistInterruptMessage();
+        return;
+      }
       if (part.type === "text-delta") {
         fullText += part.text;
         const event: ChatStreamEvent = { type: "text-delta", text: part.text };
