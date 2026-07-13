@@ -1,4 +1,8 @@
-import { SessionDialogContent, ThemeDialogContent } from "../dialogs";
+import {
+  AgentsDialogContent,
+  SessionDialogContent,
+  ThemeDialogContent,
+} from "../dialogs";
 import type { Command } from "./types";
 
 export const COMMANDS: Command[] = [
@@ -16,8 +20,13 @@ export const COMMANDS: Command[] = [
     value: "/agents",
     action: (ctx) => {
       ctx.dialog.open({
-        title: "Select Mode",
-        children: <text>Agent Selection coming soon... </text>,
+        title: "Select agent",
+        children: (
+          <AgentsDialogContent
+            currentMode={ctx.mode}
+            onSelectMode={ctx.setMode}
+          />
+        ),
       });
     },
   },
