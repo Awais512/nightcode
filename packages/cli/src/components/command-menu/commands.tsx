@@ -1,5 +1,7 @@
+import { SUPPORTED_CHAT_MODELS } from "@nightcode/shared";
 import {
   AgentsDialogContent,
+  ModelsDialogContent,
   SessionDialogContent,
   ThemeDialogContent,
 } from "../dialogs";
@@ -37,7 +39,12 @@ export const COMMANDS: Command[] = [
     action: (ctx) => {
       ctx.dialog.open({
         title: "Select Model",
-        children: <text>Model Selection coming soon... </text>,
+        children: (
+          <ModelsDialogContent
+            models={SUPPORTED_CHAT_MODELS.map((model) => model.id)}
+            onSelectModel={ctx.setModel}
+          />
+        ),
       });
     },
   },
