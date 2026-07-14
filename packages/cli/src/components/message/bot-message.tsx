@@ -3,8 +3,9 @@ import type {
   ClientMessagePart,
   ClientToolCallPart,
 } from "../../hooks/use-chat";
+import { useMemo } from "react";
 import { useTheme } from "../../providers/theme";
-import { TextAttributes } from "@opentui/core";
+import { TextAttributes, SyntaxStyle } from "@opentui/core";
 import { EmptyBorder } from "../border";
 
 type Props = {
@@ -62,69 +63,67 @@ export function BotMessage({
   interrupted = false,
 }: Props) {
   const { colors } = useTheme();
-
-  const text = parts
-    .filter((p) => p.type === "text")
-    .map((p) => p.text)
-    .join("");
+  const syntaxStyle = useMemo(() => SyntaxStyle.create(), []);
 
   return (
     <box width="100%" alignItems="center">
       {groupConsecutiveParts(parts).map((group) => (
         <box key={group.key} paddingY={1} width="100%">
-          {group.parts.map((part, j) => {
-            if (part.type === "reasoning") {
-              return (
-                <box
-                  key={`reasoning-${j}`}
-                  border={["left"]}
-                  borderColor={colors.thinkingBorder}
-                  customBorderChars={{
-                    ...EmptyBorder,
-                    vertical: "│",
-                  }}
-                  width="100%"
-                  paddingX={2}
-                >
-                  <text attributes={TextAttributes.DIM}>
-                    <em fg={colors.thinking}>Thinking:</em> {part.text}
-                  </text>
-                </box>
-              );
-            }
+          {group.type === "text" ? (
+            <box paddingX={3} width="100%">
+              <markdown
+                content={group.parts.map((p) => (p as { type: "text"; text: string }).text).join("")}
+                streaming={streaming}
+                syntaxStyle={syntaxStyle}
+              />
+            </box>
+          ) : (
+            group.parts.map((part, j) => {
+              if (part.type === "reasoning") {
+                return (
+                  <box
+                    key={`reasoning-${j}`}
+                    border={["left"]}
+                    borderColor={colors.thinkingBorder}
+                    customBorderChars={{
+                      ...EmptyBorder,
+                      vertical: "│",
+                    }}
+                    width="100%"
+                    paddingX={2}
+                  >
+                    <text attributes={TextAttributes.DIM}>
+                      <em fg={colors.thinking}>Thinking:</em> {part.text}
+                    </text>
+                  </box>
+                );
+              }
 
-            if (part.type === "tool-call") {
-              return (
-                <box
-                  key={part.id}
-                  border={["left"]}
-                  borderColor={colors.thinkingBorder}
-                  customBorderChars={{
-                    ...EmptyBorder,
-                    vertical: "│",
-                  }}
-                  width="100%"
-                  paddingX={2}
-                >
-                  <text attributes={TextAttributes.DIM}>
-                    <em fg={colors.info}>{formatToolName(part.name)}:</em>{" "}
-                    {formatToolArgs(part)}
-                    {part.status === "calling" ? " …" : ""}
-                  </text>
-                </box>
-              );
-            }
+              if (part.type === "tool-call") {
+                return (
+                  <box
+                    key={part.id}
+                    border={["left"]}
+                    borderColor={colors.thinkingBorder}
+                    customBorderChars={{
+                      ...EmptyBorder,
+                      vertical: "│",
+                    }}
+                    width="100%"
+                    paddingX={2}
+                  >
+                    <text attributes={TextAttributes.DIM}>
+                      <em fg={colors.info}>{formatToolName(part.name)}:</em>{" "}
+                      {formatToolArgs(part)}
+                      {part.status === "calling" ? " …" : ""}
+                    </text>
+                  </box>
+                );
+              }
 
-            if (part.type === "text") {
-              return (
-                <box key={`text-${j}`} paddingX={3} width="100%">
-                  <text>{part.text}</text>
-                </box>
-              );
-            }
-
-            return null;
-          })}
+              return null;
+            })
+          )}
         </box>
       ))}
 
