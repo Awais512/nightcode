@@ -1,6 +1,3 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { homedir } from "node:os";
-import { join } from "node:path";
 import {
   createContext,
   useContext,
@@ -10,43 +7,19 @@ import {
 } from "react";
 import { type ThemeColors, type Theme, THEMES } from "../../theme";
 import { DEFAULT_THEME } from "../../theme";
-
-const CONFIG_DIR = join(homedir(), ".nightcode");
-const THEME_PREFERENCES_PATH = join(CONFIG_DIR, "preferences.json");
-
-type ThemePreferences = {
-  themeName: string;
-};
+import { readPreferences, writePreferences } from "../../lib/preferences";
 
 function getInitialTheme(): Theme {
-  try {
-    const preferences = JSON.parse(
-      readFileSync(THEME_PREFERENCES_PATH, "utf8"),
-    ) as Partial<ThemePreferences>;
+  const preferences = readPreferences();
+  const savedTheme = THEMES.find(
+    (theme) => theme.name === preferences.themeName,
+  );
 
-    const savedTheme = THEMES.find(
-      (theme) => theme.name === preferences.themeName,
-    );
-
-    return savedTheme ?? DEFAULT_THEME;
-  } catch (error) {
-    return DEFAULT_THEME;
-  }
+  return savedTheme ?? DEFAULT_THEME;
 }
 
 function persistTheme(theme: Theme) {
-  try {
-    mkdirSync(CONFIG_DIR, { recursive: true });
-    writeFileSync(
-      THEME_PREFERENCES_PATH,
-      JSON.stringify(
-        { themeName: theme.name } satisfies ThemePreferences,
-        null,
-        2,
-      ),
-      "utf8",
-    );
-  } catch (error) {}
+  writePreferences({ themeName: theme.name });
 }
 
 type ThemeContextValue = {
